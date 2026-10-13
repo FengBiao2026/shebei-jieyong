@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设备借用登记 · 管理端</title>
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+
+<!-- file:// 协议警告（直接双击打开时显示） -->
+<div id="fileWarn" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:#DC2626;color:#fff;padding:16px 20px;font-size:15px;line-height:1.7;box-shadow:0 4px 12px rgba(0,0,0,.3);">
+  <div style="max-width:760px;margin:0 auto;">
+    <b style="font-size:17px;">⚠️ 请勿直接双击 index.html 打开！</b><br>
+    这样二维码地址无效，手机扫码打不开。<br>
+    <b>正确方式</b>：先双击「启动服务器.bat」，然后在浏览器地址栏输入
+    <b style="background:rgba(255,255,255,.2);padding:2px 8px;border-radius:4px;font-family:monospace;">http://localhost:8000/</b>
+    回车访问。
+  </div>
+</div>
+<script>
+if (location.protocol === 'file:') {
+  document.getElementById('fileWarn').style.display = 'block';
+}
+</script>
+
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-brand"><span class="logo">📦</span>
+      <div>设备借用登记<span class="header-sub">管理端</span></div>
+    </div>
+    <button class="btn" style="background:rgba(255,255,255,.18);color:#fff;" onclick="openCloudModal()">☁ 云端</button>
+    <button class="btn" style="background:rgba(255,255,255,.18);color:#fff;" onclick="exportData()">⬇ 导出</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <div id="modeBanner"></div>
+
+  <div class="stats">
+    <div class="stat blue"><div class="num" id="stTotal">0</div><div class="label">设备总数</div></div>
+    <div class="stat green"><div class="num" id="stAvail">0</div><div class="label">可借用</div></div>
+    <div class="stat orange"><div class="num" id="stBorrowed">0</div><div class="label">使用中</div></div>
+    <div class="stat gray"><div class="num" id="stRecords">0</div><div class="label">登记次数</div></div>
+  </div>
+
+  <div class="toolbar">
+    <input class="input-search" id="searchInput" placeholder="🔍 搜索设备名称 / 编号…" oninput="renderDevices()">
+    <button class="btn btn-ghost" onclick="showPrintAll()">🖨 二维码</button>
+    <button class="btn btn-primary" onclick="openDeviceModal()">＋ 添加设备</button>
+  </div>
+
+  <div id="deviceList" class="device-grid"></div>
+
+  <div class="card" style="margin-top:22px;">
+    <div class="card-title">📋 借用 / 归还记录
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-sm btn-ghost" onclick="importData()">导入</button>
+      </div>
+    </div>
+    <div class="filter-row" id="recFilterRow">
+      <button class="chip active" data-f="all" onclick="setRecFilter('all')">全部</button>
+      <button class="chip" data-f="borrow" onclick="setRecFilter('borrow')">借用</button>
+      <button class="chip" data-f="return" onclick="setRecFilter('return')">归还</button>
+    </div>
+    <div id="recordList"></div>
+  </div>
+
+</div>
+
+<!-- 弹窗 -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<!-- 打印区域 -->
+<div class="print-area" id="printArea"></div>
+
+<script src="js/config.js?v=4"></script>
+<script src="js/store.js?v=4"></script>
+<script src="js/common.js?v=4"></script>
+<script src="js/qrcode.min.js?v=4"></script>
+<script src="js/admin.js?v=4"></script>
+</body>
+</html>
