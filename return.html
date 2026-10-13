@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>归还登记</title>
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body class="mobile-body">
+
+<div class="mobile-shell">
+  <div class="mobile-top">
+    <div class="logo-big">📥</div>
+    <h2>归还登记</h2>
+    <p>确认归还设备并填写返还人信息</p>
+  </div>
+
+  <div id="deviceInfo"></div>
+  <div id="alertBox"></div>
+
+  <div id="formArea">
+    <div class="form-card">
+      <div class="field">
+        <label class="field-label">归还人姓名 <span class="req">*</span></label>
+        <input class="field-input" id="fName" placeholder="请输入姓名" autocomplete="name">
+      </div>
+      <div class="field">
+        <label class="field-label">手机号 <span class="req">*</span></label>
+        <input class="field-input" id="fPhone" type="tel" maxlength="11" placeholder="请输入手机号" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label class="field-label">部门 / 班级</label>
+        <input class="field-input" id="fDept" placeholder="选填，如：研发部 / 2班">
+      </div>
+      <button class="btn btn-primary btn-block btn-lg" onclick="submitAction()">✅ 确认归还</button>
+    </div>
+    <p class="form-tip">如无法扫码，请长按二维码手动输入设备编号</p>
+  </div>
+
+  <div id="resultArea" style="display:none;"></div>
+</div>
+
+<script src="js/config.js?v=4"></script>
+<script src="js/store.js?v=4"></script>
+<script src="js/common.js?v=4"></script>
+<script src="js/mobile.js?v=4"></script>
+</body>
+</html>
