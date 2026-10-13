@@ -43,6 +43,23 @@ function renderDevice() {
   const el = document.getElementById('deviceInfo');
   const alert = document.getElementById('alertBox');
   let d = DB.getDevice(DEVICE_ID);
+
+  // URL 参数中的设备信息（云端模式下由二维码携带，确保与管理端同步）
+  const params = new URLSearchParams(location.search);
+  const urlName = params.get('n');
+  const urlModel = params.get('m');
+
+  if (!d && urlName) {
+    // 云端模式：localStorage 无此设备，但二维码携带了最新信息
+    d = { id: DEVICE_ID, name: urlName, model: urlModel || '', status: 'available', borrower: null };
+    DB.devices.push(d);
+    DB.save();
+  } else if (d && urlName) {
+    // URL 携带的信息优先（管理端最新修改）
+    d.name = urlName;
+    if (urlModel !== null) d.model = urlModel;
+  }
+
   if (!d) {
     el.innerHTML = '';
     alert.innerHTML = `<div class="borrower-info" style="background:var(--danger-soft);border-color:#FECACA;color:#991B1B;">❌ 未找到设备 <b>${escapeHtml(DEVICE_ID)}</b>。<br>请检查编号是否正确，或联系管理员添加设备。</div>`;
