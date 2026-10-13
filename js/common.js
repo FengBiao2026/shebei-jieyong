@@ -65,9 +65,19 @@ function renderQR(el, text, size = 220) {
   });
 }
 
-function deviceBorrowUrl(id) { return siteBaseUrl().replace(/\/+$/, '') + '/borrow.html?d=' + encodeURIComponent(id); }
+function deviceBorrowUrl(id, dev) {
+  let url = siteBaseUrl().replace(/\/+$/, '') + '/borrow.html?d=' + encodeURIComponent(id);
+  if (dev && dev.name) url += '&n=' + encodeURIComponent(dev.name);
+  if (dev && dev.model) url += '&m=' + encodeURIComponent(dev.model);
+  return url;
+}
 
-function deviceReturnUrl(id) { return siteBaseUrl().replace(/\/+$/, '') + '/return.html?d=' + encodeURIComponent(id); }
+function deviceReturnUrl(id, dev) {
+  let url = siteBaseUrl().replace(/\/+$/, '') + '/return.html?d=' + encodeURIComponent(id);
+  if (dev && dev.name) url += '&n=' + encodeURIComponent(dev.name);
+  if (dev && dev.model) url += '&m=' + encodeURIComponent(dev.model);
+  return url;
+}
 
 function downloadDataURL(canvas, filename) {
   const a = document.createElement('a');
