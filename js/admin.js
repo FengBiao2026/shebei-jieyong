@@ -189,7 +189,7 @@ function submitDevice(id) {
     DB.addDevice(data);
   }
   closeModal();
-  toast('已保存');
+  toast(id ? '已保存，请重新生成二维码贴纸' : '已保存');
 }
 
 async function deleteDevice(id) {
@@ -211,14 +211,14 @@ function confirmDelete(id) {
 function openQrModal(id) {
   const d = DB.getDevice(id);
   if (!d) return;
-  const borrowUrl = deviceBorrowUrl(id);
-  const returnUrl = deviceReturnUrl(id);
+  const borrowUrl = deviceBorrowUrl(id, d);
+  const returnUrl = deviceReturnUrl(id, d);
   openModal(`二维码 · ${escapeHtml(d.name)}`,
     `<div class="qr-box">
-       <div style="background:#FFF3CD;border:1px solid #FFECB5;color:#856404;border-radius:8px;padding:8px 12px;font-size:12px;width:100%;text-align:left;line-height:1.6;">
-         ⚠️ <b>每次重启服务器后请重新打印二维码</b>，旧二维码可能已失效。<br>
-         手机扫码后若出现链接文字，请<b>点击链接</b>打开页面。
-       </div>
+        <div style="background:#FFF3CD;border:1px solid #FFECB5;color:#856404;border-radius:8px;padding:8px 12px;font-size:12px;width:100%;text-align:left;line-height:1.6;">
+          ✅ 二维码已嵌入设备名称/型号，手机扫码自动同步最新信息。<br>
+          ⚠️ 若<b>修改了设备名称</b>，请重新打印二维码贴纸，旧二维码显示的是旧名称。
+        </div>
        <div class="qr-canvas-box"><div id="qrBorrowBox"></div></div>
        <div style="font-weight:700;font-size:13px;">📤 借用二维码</div>
        <div class="qr-url">${escapeHtml(borrowUrl)}</div>
@@ -247,7 +247,7 @@ function downloadQr(boxId, name) {
 
 function printQr(id, type) {
   const d = DB.getDevice(id);
-  const url = type === 'borrow' ? deviceBorrowUrl(id) : deviceReturnUrl(id);
+  const url = type === 'borrow' ? deviceBorrowUrl(id, d) : deviceReturnUrl(id, d);
   const area = document.getElementById('printArea');
   area.innerHTML = `
     <div class="print-label">
@@ -274,8 +274,8 @@ function showPrintAll() {
       <div class="pl-id">${escapeHtml(d.id)}</div>
     </div>`).join('');
   setTimeout(() => {
-    area.querySelectorAll('.pl-qr-borrow').forEach((el, i) => renderQR(el, deviceBorrowUrl(DB.devices[i].id), 170));
-    area.querySelectorAll('.pl-qr-return').forEach((el, i) => renderQR(el, deviceReturnUrl(DB.devices[i].id), 170));
+    area.querySelectorAll('.pl-qr-borrow').forEach((el, i) => renderQR(el, deviceBorrowUrl(DB.devices[i].id, DB.devices[i]), 170));
+    area.querySelectorAll('.pl-qr-return').forEach((el, i) => renderQR(el, deviceReturnUrl(DB.devices[i].id, DB.devices[i]), 170));
     setTimeout(() => window.print(), 400);
   }, 200);
 }
